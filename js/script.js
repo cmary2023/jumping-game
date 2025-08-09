@@ -40,6 +40,7 @@ let score = 0;
 
 // Initialize game
 function initGame() {
+    showIntro = false; // hide intro screen
     gameRunning = true;
     gameOver = false;
     startButton.style.display = 'none';
