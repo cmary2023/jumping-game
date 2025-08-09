@@ -25,9 +25,9 @@ let gameOver = false;
 
 let character = {
     x: 50,
-    y: canvas.height - 60,
+    y: canvas.height - 90,
     width: 40,
-    height: 40,
+    height: 90,
     gravity: 1,
     jumpPower: 15,
     velocityY: 0,
@@ -44,7 +44,7 @@ function initGame() {
     startButton.style.display = 'none';
     restartButton.style.display = 'none';
     character.x = 50;
-    character.y = canvas.height - 60;
+    character.y = canvas.height - 90;
     character.velocityY = 0;
     character.isJumping = false;
     obstacles = [];
@@ -102,8 +102,8 @@ function generateObstacle() {
     const obstacle = {
         x: canvas.width,
         y: canvas.height - 60,
-        width: 20,
-        height: 40
+        width: 50,
+        height: 60
     };
     obstacles.push(obstacle);
 }
