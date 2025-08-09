@@ -1,7 +1,10 @@
-const canvas = document.getElementById('gameCanvas');
+// Get references to the new HTML elements
+const welcomeScreen = document.getElementById('welcomeScreen');
 const startButton = document.getElementById('startButton');
 const restartButton = document.getElementById('restartButton');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById('gameCanvas');
+// Initial state of the canvas
+canvas.style.display = 'none';
 // Load images
 const characterImage = new Image();
 characterImage.src = './images/tom.png'; // your cartoon character
@@ -41,14 +44,23 @@ let score = 0;
 function initGame() {
     gameRunning = true;
     gameOver = false;
-    startButton.style.display = 'none';
+    
+    // Hide the welcome screen and show the canvas
+    welcomeScreen.style.display = 'none';
+    canvas.style.display = 'block';
+    
+    // Hide the restart button
     restartButton.style.display = 'none';
+    
     character.x = 50;
     character.y = canvas.height - 60;
     character.velocityY = 0;
     character.isJumping = false;
     obstacles = [];
     score = 0;
+    
+    // Start the obstacle generation interval
+    obstacleInterval = setInterval(generateObstacle, 2000);
     startGameLoop();
 }
 
@@ -70,12 +82,28 @@ function startGameLoop() {
     }
 }
 
-// End game
 function endGame() {
     gameRunning = false;
     gameOver = true;
+    
+    // Stop obstacle generation
+    clearInterval(obstacleInterval);
+    
+    // Show the game over message and the restart button
     restartButton.style.display = 'block';
+    
+    // No need to clear the canvas here, the draw loop will handle it
 }
+
+// Event listeners for the buttons
+startButton.addEventListener('click', initGame);
+restartButton.addEventListener('click', initGame);
+
+// Initial display of the game state
+window.onload = function() {
+    // The welcome screen is visible by default in the HTML
+    // and the canvas is hidden. No need to add more code here.
+};
 
 // Collision detection
 function checkCollision() {
