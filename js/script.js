@@ -38,6 +38,7 @@ let character = {
 let obstacles = [];
 let score = 0;
 
+// Initialize game
 function initGame() {
     gameRunning = true;
     gameOver = false;
@@ -51,6 +52,7 @@ function initGame() {
     score = 0;
     startGameLoop();
 }
+
 // Start game loop
 function startGameLoop() {
     if (!gameRunning) return;
@@ -100,9 +102,9 @@ document.addEventListener('keydown', function(event) {
 function generateObstacle() {
     const obstacle = {
         x: canvas.width,
-        y: canvas.height - 80,
-        width: 80,
-        height: 80
+        y: canvas.height - 60,
+        width: 20,
+        height: 40
     };
     obstacles.push(obstacle);
 }
@@ -122,52 +124,38 @@ function updateCharacter() {
         character.velocityY += character.gravity;
         character.y += character.velocityY;
 
-        if (character.y >= canvas.height - ) {
-            character.y = canvas.height - 150;
+        if (character.y >= canvas.height - 60) {
+            character.y = canvas.height - 60;
             character.isJumping = false;
             character.velocityY = 0;
         }
     }
 }
 
-function drawBackground() {
-    // Draw two copies of the background side-by-side
-    ctx.drawImage(backgroundImage, backgroundX, 0, canvas.width, canvas.height);
-    ctx.drawImage(backgroundImage, backgroundX + canvas.width, 0, canvas.width, canvas.height);
-
-    // Move background to the left
-    backgroundX -= backgroundSpeed;
-
-    // Reset when the first image goes off screen
-    if (backgroundX <= -canvas.width) {
-        backgroundX = 0;
-    }
-}
-
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.fillStyle = 'green';
+    ctx.fillRect(character.x, character.y, character.width, character.height);
 
-    // Draw scrolling background
-    drawBackground();
-
-    // Draw character
-    ctx.drawImage(characterImage, character.x, character.y, character.width, character.height);
-
-    // Draw obstacles
+    ctx.fillStyle = 'red';
     for (let obstacle of obstacles) {
-        ctx.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     }
 
-    // Score
     ctx.fillStyle = 'black';
-    ctx.font = '20px Arial';
     ctx.fillText('Score: ' + score, 10, 20);
 
     if (gameOver) {
-        ctx.font = '30px Arial';
-        ctx.fillText('Game Over', canvas.width / 2 - 70, canvas.height / 2);
+        ctx.fillText('Game Over', canvas.width / 2 - 30, canvas.height / 2);
     }
 }
+
+// Event listeners
+startButton.addEventListener('click', initGame);
+restartButton.addEventListener('click', initGame);
+
+setInterval(generateObstacle, 2000);  i want to add cartoon characters
 
 // Event listeners
 startButton.addEventListener('click', initGame);
