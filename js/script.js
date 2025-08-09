@@ -26,8 +26,8 @@ let gameOver = false;
 let character = {
     x: 50,
     y: canvas.height - 60,
-    width: 40,
-    height: 40,
+    width: 200,
+    height: 200,
     gravity: 1,
     jumpPower: 15,
     velocityY: 0,
@@ -102,8 +102,8 @@ function generateObstacle() {
     const obstacle = {
         x: canvas.width,
         y: canvas.height - 60,
-        width: 20,
-        height: 40
+        width: 200,
+        height:200
     };
     obstacles.push(obstacle);
 }
