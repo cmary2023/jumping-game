@@ -2,6 +2,20 @@ const canvas = document.getElementById('gameCanvas');
 const startButton = document.getElementById('startButton');
 const restartButton = document.getElementById('restartButton');
 const ctx = canvas.getContext('2d');
+// Load images
+const characterImage = new Image();
+characterImage.src = 'character.png'; // cartoon character
+
+const obstacleImage = new Image();
+obstacleImage.src = 'obstacle.png'; // obstacle image
+
+const backgroundImage = new Image();
+backgroundImage.src = 'background.png'; //background image
+
+// Background scrolling variables
+let backgroundX = 0;
+const backgroundSpeed = 2; // speed of scrolling
+
 
 canvas.width = 800;
 canvas.height = 400;
@@ -117,24 +131,45 @@ function updateCharacter() {
     }
 }
 
+function drawBackground() {
+    // Draw two copies of the background side-by-side
+    ctx.drawImage(backgroundImage, backgroundX, 0, canvas.width, canvas.height);
+    ctx.drawImage(backgroundImage, backgroundX + canvas.width, 0, canvas.width, canvas.height);
+
+    // Move background to the left
+    backgroundX -= backgroundSpeed;
+
+    // Reset when the first image goes off screen
+    if (backgroundX <= -canvas.width) {
+        backgroundX = 0;
+    }
+}
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    ctx.fillStyle = 'green';
-    ctx.fillRect(character.x, character.y, character.width, character.height);
 
-    ctx.fillStyle = 'red';
+    // Draw scrolling background
+    drawBackground();
+
+    // Draw character
+    ctx.drawImage(characterImage, character.x, character.y, character.width, character.height);
+
+    // Draw obstacles
     for (let obstacle of obstacles) {
-        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        ctx.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     }
 
+    // Score
     ctx.fillStyle = 'black';
+    ctx.font = '20px Arial';
     ctx.fillText('Score: ' + score, 10, 20);
 
     if (gameOver) {
-        ctx.fillText('Game Over', canvas.width / 2 - 30, canvas.height / 2);
+        ctx.font = '30px Arial';
+        ctx.fillText('Game Over', canvas.width / 2 - 70, canvas.height / 2);
     }
 }
+
 
 // Event listeners
 startButton.addEventListener('click', initGame);
