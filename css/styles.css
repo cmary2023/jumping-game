@@ -34,7 +34,6 @@ canvas {
 }
 
 #game-container {
-    background: #a41414;
     border: 5px solid #FFD700; /* Gold border */
     border-radius: 20px;
     padding: 20px;
