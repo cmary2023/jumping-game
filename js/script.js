@@ -2,27 +2,12 @@ const canvas = document.getElementById('gameCanvas');
 const startButton = document.getElementById('startButton');
 const restartButton = document.getElementById('restartButton');
 const ctx = canvas.getContext('2d');
-// Load images
-const characterImage = new Image();
-characterImage.src = './images/tom.png'; // cartoon character
-
-const obstacleImage = new Image();
-obstacleImage.src = './images/dog.png'; // obstacle image
-
-const backgroundImage = new Image();
-backgroundImage.src = './images/game-field.jpg'; //background image
-
-// Background scrolling variables
-let backgroundX = 0;
-const backgroundSpeed = 2; // speed of scrolling
-
 
 canvas.width = 800;
 canvas.height = 400;
 
 let gameRunning = false;
 let gameOver = false;
-
 
 let character = {
     x: 50,
@@ -155,7 +140,4 @@ function draw() {
 startButton.addEventListener('click', initGame);
 restartButton.addEventListener('click', initGame);
 
-setInterval(generateObstacle, 2000);  
-
-
-
+setInterval(generateObstacle, 2000); 
