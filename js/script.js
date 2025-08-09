@@ -9,6 +9,7 @@ canvas.height = 400;
 let gameRunning = false;
 let gameOver = false;
 
+// Character properties
 let character = {
     x: 50,
     y: canvas.height - 60,
@@ -20,8 +21,23 @@ let character = {
     isJumping: false
 };
 
+// Game state
 let obstacles = [];
 let score = 0;
+
+// Load images
+const characterImage = new Image();
+characterImage.src = './images/tom.png'; // your cartoon character
+
+const obstacleImage = new Image();
+obstacleImage.src = './images/dog.png'; // your obstacle image
+
+const backgroundImage = new Image();
+backgroundImage.src = './images/game-field.jpg'; // your background image
+
+// Background scrolling variables
+let backgroundX = 0;
+const backgroundSpeed = 2;
 
 // Initialize game
 function initGame() {
@@ -38,13 +54,12 @@ function initGame() {
     startGameLoop();
 }
 
-// Start game loop
+// Game loop
 function startGameLoop() {
     if (!gameRunning) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Game logic (e.g., character movement, obstacle generation)
     updateCharacter();
     updateObstacles();
     draw();
@@ -77,8 +92,9 @@ function checkCollision() {
     return false;
 }
 
+// Controls
 document.addEventListener('keydown', function(event) {
-    if (event.code === 'Space' && !character.isJumping) {
+    if (event.code === 'Space' && !character.isJumping && gameRunning) {
         character.isJumping = true;
         character.velocityY = -character.jumpPower;
     }
@@ -88,7 +104,7 @@ function generateObstacle() {
     const obstacle = {
         x: canvas.width,
         y: canvas.height - 60,
-        width: 20,
+        width: 40,
         height: 40
     };
     obstacles.push(obstacle);
@@ -117,22 +133,43 @@ function updateCharacter() {
     }
 }
 
+// Background draw
+function drawBackground() {
+    ctx.drawImage(backgroundImage, backgroundX, 0, canvas.width, canvas.height);
+    ctx.drawImage(backgroundImage, backgroundX + canvas.width, 0, canvas.width, canvas.height);
+
+    backgroundX -= backgroundSpeed;
+
+    if (backgroundX <= -canvas.width) {
+        backgroundX = 0;
+    }
+}
+
+// Draw everything
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    ctx.fillStyle = 'green';
-    ctx.fillRect(character.x, character.y, character.width, character.height);
 
-    ctx.fillStyle = 'red';
+    drawBackground();
+
+    ctx.drawImage(characterImage, character.x, character.y, character.width, character.height);
+
     for (let obstacle of obstacles) {
-        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        ctx.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     }
 
     ctx.fillStyle = 'black';
+    ctx.font = '20px Arial';
     ctx.fillText('Score: ' + score, 10, 20);
 
+    if (!gameRunning && !gameOver) {
+        ctx.font = '18px Arial';
+        ctx.fillText('How to Play:', canvas.width / 2 - 50, canvas.height / 2 - 20);
+        ctx.fillText('Press SPACE to jump and avoid obstacles', canvas.width / 2 - 160, canvas.height / 2 + 10);
+    }
+
     if (gameOver) {
-        ctx.fillText('Game Over', canvas.width / 2 - 30, canvas.height / 2);
+        ctx.font = '30px Arial';
+        ctx.fillText('Game Over', canvas.width / 2 - 70, canvas.height / 2);
     }
 }
 
@@ -140,4 +177,11 @@ function draw() {
 startButton.addEventListener('click', initGame);
 restartButton.addEventListener('click', initGame);
 
-setInterval(generateObstacle, 2000); 
+setInterval(() => {
+    if (gameRunning) {
+        generateObstacle();
+    }
+}, 2000);
+
+// Show instructions before starting
+draw();
