@@ -84,7 +84,6 @@ function checkCollision() {
             character.x + character.width > obstacle.x &&
             character.y < obstacle.y + obstacle.height &&
             character.y + character.height > obstacle.y) {
-            endGame();
             return true;
         }
     }
@@ -170,9 +169,69 @@ function draw() {
     }
 }
 
+// **New Function**
+function drawInstructions() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'; // Semi-transparent overlay
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = 'white';
+    ctx.font = '30px Arial';
+    ctx.fillText('How to Play', canvas.width / 2 - 80, canvas.height / 2 - 80);
+
+    ctx.font = '20px Arial';
+    ctx.fillText('Press the **Spacebar** to jump over the obstacles.', canvas.width / 2 - 200, canvas.height / 2 - 20);
+    ctx.fillText('Avoid the dogs to get a high score!', canvas.width / 2 - 150, canvas.height / 2 + 20);
+}
 
 // Event listeners
 startButton.addEventListener('click', initGame);
 restartButton.addEventListener('click', initGame);
 
-setInterval(generateObstacle, 2000);
+// **Modified to only start the interval after the game begins**
+let obstacleInterval;
+function startGameLoop() {
+    if (!gameRunning) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Game logic (e.g., character movement, obstacle generation)
+    updateCharacter();
+    updateObstacles();
+    draw();
+
+    if (checkCollision()) {
+        endGame();
+    } else {
+        requestAnimationFrame(startGameLoop);
+    }
+}
+
+function initGame() {
+    gameRunning = true;
+    gameOver = false;
+    startButton.style.display = 'none';
+    restartButton.style.display = 'none';
+    character.x = 50;
+    character.y = canvas.height - 60;
+    character.velocityY = 0;
+    character.isJumping = false;
+    obstacles = [];
+    score = 0;
+    // **Start the obstacle generation interval here**
+    obstacleInterval = setInterval(generateObstacle, 2000);
+    startGameLoop();
+}
+
+function endGame() {
+    gameRunning = false;
+    gameOver = true;
+    // **Clear the obstacle generation interval when the game ends**
+    clearInterval(obstacleInterval);
+    restartButton.style.display = 'block';
+}
+
+// **Initial draw call to show instructions when the page loads**
+window.onload = function() {
+    drawBackground(); // Draw the background first
+    drawInstructions();
+};
