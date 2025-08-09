@@ -1,59 +1,52 @@
-body {
-    font-family: 'Fredoka One', sans-serif; /* Use a playful font */
-    background: linear-gradient(to bottom, #87CEEB, #FFB6C1); /* Sky-like gradient */
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-canvas {
-    display: block;
-    margin: 0 auto;
-    background-color: #ffffff;
-    border: 2px solid #000000;
-}
-
-.character {
-    width: 50px;
-    height: 50px;
-    background-color: #ffcc00;
-    position: absolute;
-    bottom: 50px;
-    left: 50px;
-}
-
-.obstacle {
-    width: 30px;
-    height: 50px;
-    background-color: #ff0000;
-    position: absolute;
-    bottom: 50px;
-}
-
-#game-container {
-    background: #fff;
-    border: 5px solid #FFD700; /* Gold border */
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-button {
-    font-size: 1.2rem;
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 10px;
-    background: #FF69B4; /* Bright pink */
-    color: white;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.2s;
-}
-
-button:hover {
-    background: #FF1493; /* Darker pink */
-    transform: scale(1.1);
-}
+ body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff, #cbebff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        #game-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 4px solid #FBC02D;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            padding: 1.5rem;
+        }
+        #gameCanvas {
+            border-radius: 0.5rem;
+            background-color: #e0f7fa;
+            width: 100%;
+            height: auto;
+            max-width: 800px;
+            max-height: 400px;
+            display: block;
+        }
+        #welcome-screen,
+        #game-over-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            transition: all 0.2s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
