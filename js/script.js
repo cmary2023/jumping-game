@@ -25,9 +25,9 @@ let gameOver = false;
 
 let character = {
     x: 50,
-    y: canvas.height - 60,
-    width: 200,
-    height: 200,
+    y: canvas.height - 100,
+    width: 100,
+    height: 100,
     gravity: 1,
     jumpPower: 15,
     velocityY: 0,
@@ -44,7 +44,7 @@ function initGame() {
     startButton.style.display = 'none';
     restartButton.style.display = 'none';
     character.x = 50;
-    character.y = canvas.height - 60;
+    character.y = canvas.height - 100;
     character.velocityY = 0;
     character.isJumping = false;
     obstacles = [];
@@ -101,9 +101,9 @@ document.addEventListener('keydown', function(event) {
 function generateObstacle() {
     const obstacle = {
         x: canvas.width,
-        y: canvas.height - 60,
-        width: 200,
-        height:200
+        y: canvas.height - 100,
+        width: 100,
+        height:100
     };
     obstacles.push(obstacle);
 }
@@ -123,8 +123,8 @@ function updateCharacter() {
         character.velocityY += character.gravity;
         character.y += character.velocityY;
 
-        if (character.y >= canvas.height - 60) {
-            character.y = canvas.height - 60;
+        if (character.y >= canvas.height - 100) {
+            character.y = canvas.height - 100;
             character.isJumping = false;
             character.velocityY = 0;
         }
