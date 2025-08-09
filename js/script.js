@@ -101,9 +101,9 @@ document.addEventListener('keydown', function(event) {
 function generateObstacle() {
     const obstacle = {
         x: canvas.width,
-        y: canvas.height - 100,
-        width: 100,
-        height:100
+        y: canvas.height - 80,
+        width: 60,
+        height:80
     };
     obstacles.push(obstacle);
 }
