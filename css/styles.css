@@ -9,6 +9,9 @@ body {
     height: 100vh;
 }
 
+h1{
+    align: center;
+    )
 canvas {
     display: block;
     margin: 0 auto;
