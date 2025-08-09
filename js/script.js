@@ -22,6 +22,7 @@ canvas.height = 400;
 
 let gameRunning = false;
 let gameOver = false;
+let showIntro = true;
 
 let character = {
     x: 50,
@@ -160,22 +161,23 @@ function draw() {
     ctx.font = '20px Arial';
     ctx.fillText('Score: ' + score, 10, 20);
 
-    // Show instructions BEFORE the game starts
-    if (!gameRunning && !gameOver) {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // semi-transparent box
-        ctx.fillRect(canvas.width / 2 - 200, canvas.height / 2 - 80, 400, 100);
+    // INTRO SCREEN
+    if (showIntro) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.strokeStyle = 'black';
-        ctx.strokeRect(canvas.width / 2 - 200, canvas.height / 2 - 80, 400, 100);
+        ctx.fillStyle = 'white';
+        ctx.font = '28px Arial';
+        ctx.fillText('Welcome to Cartoon Jump!', canvas.width / 2 - 160, canvas.height / 2 - 40);
 
-        ctx.fillStyle = 'black';
-        ctx.font = '18px Arial';
-        ctx.fillText('How to Play', canvas.width / 2 - 50, canvas.height / 2 - 40);
-        ctx.font = '16px Arial';
-        ctx.fillText('Press SPACE to jump and avoid obstacles', canvas.width / 2 - 160, canvas.height / 2 - 10);
-        ctx.fillText('Click "Start" to begin', canvas.width / 2 - 80, canvas.height / 2 + 20);
+        ctx.font = '20px Arial';
+        ctx.fillText('Press SPACE to jump over obstacles', canvas.width / 2 - 180, canvas.height / 2);
+        ctx.fillText('Click START to begin the game', canvas.width / 2 - 150, canvas.height / 2 + 30);
+
+        return; // Stop drawing anything else
     }
 
+    // GAME OVER MESSAGE
     if (gameOver) {
         ctx.font = '30px Arial';
         ctx.fillText('Game Over', canvas.width / 2 - 70, canvas.height / 2);
