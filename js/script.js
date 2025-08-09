@@ -157,8 +157,5 @@ restartButton.addEventListener('click', initGame);
 
 setInterval(generateObstacle, 2000);  i want to add cartoon characters
 
-// Event listeners
-startButton.addEventListener('click', initGame);
-restartButton.addEventListener('click', initGame);
 
-setInterval(generateObstacle, 2000);
+
