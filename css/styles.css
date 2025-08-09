@@ -1,8 +1,12 @@
 body {
+    font-family: 'Fredoka One', sans-serif; /* Use a playful font */
+    background: linear-gradient(to bottom, #87CEEB, #FFB6C1); /* Sky-like gradient */
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 canvas {
@@ -30,19 +34,26 @@ canvas {
 }
 
 #startButton, #restartButton {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
     padding: 10px 20px;
-    font-size: 18px;
-    background-color: #4CAF50;
-    color: white;
+    margin: 10px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
+    background: #FF69B4; /* Bright pink */
+    color: white;
     cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
 }
 
 #startButton:hover, #restartButton:hover {
-    background-color: #45a049;
+    background: #FF1493; /* Darker pink */
+    transform: scale(1.1);
+}
+
+#game-container {
+    background: #fff;
+    border: 5px solid #FFD700; /* Gold border */
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
