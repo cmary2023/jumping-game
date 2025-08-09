@@ -22,7 +22,7 @@ canvas.height = 400;
 
 let gameRunning = false;
 let gameOver = false;
-let showIntro = true;
+
 
 let character = {
     x: 50,
@@ -40,7 +40,6 @@ let score = 0;
 
 // Initialize game
 function initGame() {
-    showIntro = false; // hide intro screen
     gameRunning = true;
     gameOver = false;
     startButton.style.display = 'none';
@@ -150,41 +149,27 @@ function drawBackground() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Draw scrolling background
     drawBackground();
 
+    // Draw character
     ctx.drawImage(characterImage, character.x, character.y, character.width, character.height);
 
+    // Draw obstacles
     for (let obstacle of obstacles) {
         ctx.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     }
 
+    // Score
     ctx.fillStyle = 'black';
     ctx.font = '20px Arial';
     ctx.fillText('Score: ' + score, 10, 20);
 
-    // INTRO SCREEN
-    if (showIntro) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = 'white';
-        ctx.font = '28px Arial';
-        ctx.fillText('Welcome to Cartoon Jump!', canvas.width / 2 - 160, canvas.height / 2 - 40);
-
-        ctx.font = '20px Arial';
-        ctx.fillText('Press SPACE to jump over obstacles', canvas.width / 2 - 180, canvas.height / 2);
-        ctx.fillText('Click START to begin the game', canvas.width / 2 - 150, canvas.height / 2 + 30);
-
-        return; // Stop drawing anything else
-    }
-
-    // GAME OVER MESSAGE
     if (gameOver) {
         ctx.font = '30px Arial';
         ctx.fillText('Game Over', canvas.width / 2 - 70, canvas.height / 2);
     }
 }
-
 
 // Event listeners
 startButton.addEventListener('click', initGame);
