@@ -148,21 +148,33 @@ function drawBackground() {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw scrolling background
     drawBackground();
 
-    // Draw character
     ctx.drawImage(characterImage, character.x, character.y, character.width, character.height);
 
-    // Draw obstacles
     for (let obstacle of obstacles) {
         ctx.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
     }
 
-    // Score
     ctx.fillStyle = 'black';
     ctx.font = '20px Arial';
     ctx.fillText('Score: ' + score, 10, 20);
+
+    // Show instructions BEFORE the game starts
+    if (!gameRunning && !gameOver) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // semi-transparent box
+        ctx.fillRect(canvas.width / 2 - 200, canvas.height / 2 - 80, 400, 100);
+
+        ctx.strokeStyle = 'black';
+        ctx.strokeRect(canvas.width / 2 - 200, canvas.height / 2 - 80, 400, 100);
+
+        ctx.fillStyle = 'black';
+        ctx.font = '18px Arial';
+        ctx.fillText('How to Play', canvas.width / 2 - 50, canvas.height / 2 - 40);
+        ctx.font = '16px Arial';
+        ctx.fillText('Press SPACE to jump and avoid obstacles', canvas.width / 2 - 160, canvas.height / 2 - 10);
+        ctx.fillText('Click "Start" to begin', canvas.width / 2 - 80, canvas.height / 2 + 20);
+    }
 
     if (gameOver) {
         ctx.font = '30px Arial';
