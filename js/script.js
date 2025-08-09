@@ -26,9 +26,9 @@ let gameOver = false;
 
 let character = {
     x: 50,
-    y: canvas.height - 100,
-    width: 90,
-    height: 100,
+    y: canvas.height - 150,
+    width: 100,
+    height: 150,
     gravity: 1,
     jumpPower: 15,
     velocityY: 0,
@@ -124,8 +124,8 @@ function updateCharacter() {
         character.velocityY += character.gravity;
         character.y += character.velocityY;
 
-        if (character.y >= canvas.height - 100) {
-            character.y = canvas.height - 100;
+        if (character.y >= canvas.height - ) {
+            character.y = canvas.height - 150;
             character.isJumping = false;
             character.velocityY = 0;
         }
