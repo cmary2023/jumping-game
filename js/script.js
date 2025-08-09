@@ -4,13 +4,13 @@ const restartButton = document.getElementById('restartButton');
 const ctx = canvas.getContext('2d');
 // Load images
 const characterImage = new Image();
-characterImage.src = 'character.png'; // cartoon character
+characterImage.src = './images/tom.png'; // cartoon character
 
 const obstacleImage = new Image();
-obstacleImage.src = 'obstacle.png'; // obstacle image
+obstacleImage.src = './images/dog.png'; // obstacle image
 
 const backgroundImage = new Image();
-backgroundImage.src = 'background.png'; //background image
+backgroundImage.src = './images/game-field.jpg'; //background image
 
 // Background scrolling variables
 let backgroundX = 0;
