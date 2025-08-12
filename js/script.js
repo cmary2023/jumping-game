@@ -52,6 +52,12 @@ const canvas = document.getElementById("gameCanvas");
         const jumpSynth = new Tone.Synth().toDestination();
         const gameOverSynth = new Tone.Synth().toDestination();
 
+        // Background music loop
+        const bgSynth = new Tone.PolySynth().toDestination();
+        const bgLoop = new Tone.Loop(time => {
+            bgSynth.triggerAttackRelease(["C3", "E3", "G3"], "1n", time);
+        }, "1m"); // Removed .start(0) here so it can be controlled by the game state.
+
         function preloadImages() {
             return new Promise((resolve) => {
                 imagesToLoad.forEach(img => {
