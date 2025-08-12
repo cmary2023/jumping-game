@@ -18,9 +18,9 @@ canvas {
 
 #startButton, #restartButton {
    position: absolute;
-    top: 50%;
+    bottom: 20px; /* distance from bottom */
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%); /* center horizontally */
     padding: 10px 20px;
     font-size: 18px;
     background-color: #4CAF50;
