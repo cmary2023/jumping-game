@@ -208,9 +208,6 @@ function gameOver() {
     clearInterval(obstacleGenerationIntervalId);
     drawGameOver();
     restartButton.style.display = 'block';
-
-    // Show instructions again on game over
-    document.getElementById('instructions').style.display = 'block';
 }
 
 
