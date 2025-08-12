@@ -41,7 +41,7 @@ const canvas = document.getElementById("gameCanvas");
         // Set image sources and handle preloading
         characterImage.src = './images/tom.png';
         obstacleImage1.src = './images/dog.png';
-        obstacleImage2.src = '';
+        obstacleImage2.src = './images/jerry.png';
         background.image.src = './images/game-field.jpg';
 
         // An array to hold all images to preload
