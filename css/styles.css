@@ -12,15 +12,13 @@ body {
 canvas {
     display: block;
     margin: 0 auto;
-    background-color: #ffffff;
     border: 2px solid #000000;
 }
 
 #startButton, #restartButton {
    position: absolute;
     bottom: 20px; /* distance from bottom */
-    left: 50%;
-    transform: translateX(-50%); /* center horizontally */
+    left: 40%;
     padding: 10px 20px;
     font-size: 18px;
     background-color: #4CAF50;
@@ -38,7 +36,7 @@ canvas {
 #game-container {
      position: relative;
     width: 800px;
-    height: 300px;
+    height: 400px;
     background-image: url('./images/game-field.jpg');
     background-size: cover;
     background-position: center;
