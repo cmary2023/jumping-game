@@ -1,237 +1,240 @@
-const canvas = document.getElementById('gameCanvas');
-const startButton = document.getElementById('startButton');
-const restartButton = document.getElementById('restartButton');
-const ctx = canvas.getContext('2d');
-// Load images
-const characterImage = new Image();
-characterImage.src = './images/tom.png'; // your cartoon character
+const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
 
-const obstacleImage = new Image();
-obstacleImage.src = './images/dog.png'; // your obstacle image
+        const startButton = document.getElementById("startButton");
+        const restartButton = document.getElementById("restartButton");
 
-const backgroundImage = new Image();
-backgroundImage.src = './images/game-field.jpg'; // your background image
+        // Game state variables
+        let isJumping = false;
+        let gameRunning = false;
+        let score = 0;
+        let animationFrameId;
+        let obstacleGenerationIntervalId;
 
-// Background scrolling variables
-let backgroundX = 0;
-const backgroundSpeed = 2; // speed of scrolling
+        // Character variables
+        const character = {
+            x: 80,
+            y: 0,
+            width: 60,
+            height: 80,
+            velocityY: 0
+        };
+        const gravity = 1;
+        const jumpStrength = 20;
 
+        // Obstacle variables
+        const obstacles = [];
+        let obstacleSpeed = 5;
 
-canvas.width = 800;
-canvas.height = 400;
+        // Background variables
+        const background = {
+            image: new Image(),
+            x: 0,
+            speed: 2 // Speed of the scrolling background
+        };
 
-let gameRunning = false;
-let gameOver = false;
+        // Image assets
+        const characterImage = new Image();
+        const obstacleImage1 = new Image(); // For the dog
+        const obstacleImage2 = new Image(); // For the cheese
 
-let character = {
-    x: 50,
-    y: canvas.height - 60,
-    width: 40,
-    height: 40,
-    gravity: 1,
-    jumpPower: 15,
-    velocityY: 0,
-    isJumping: false
-};
+        // Set image sources and handle preloading
+        characterImage.src = './images/tom.png';
+        obstacleImage1.src = './images/dog.png';
+        obstacleImage2.src = '';
+        background.image.src = './images/game-field.jpg';
 
-let obstacles = [];
-let score = 0;
+        // An array to hold all images to preload
+        const imagesToLoad = [characterImage, obstacleImage1, obstacleImage2, background.image];
+        let imagesLoadedCount = 0;
 
-// Initialize game
-function initGame() {
-    gameRunning = true;
-    gameOver = false;
-    startButton.style.display = 'none';
-    restartButton.style.display = 'none';
-    character.x = 50;
-    character.y = canvas.height - 60;
-    character.velocityY = 0;
-    character.isJumping = false;
-    obstacles = [];
-    score = 0;
-    startGameLoop();
-}
-
-// Start game loop
-function startGameLoop() {
-    if (!gameRunning) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Game logic (e.g., character movement, obstacle generation)
-    updateCharacter();
-    updateObstacles();
-    draw();
-
-    if (checkCollision()) {
-        endGame();
-    } else {
-        requestAnimationFrame(startGameLoop);
-    }
-}
-
-// End game
-function endGame() {
-    gameRunning = false;
-    gameOver = true;
-    restartButton.style.display = 'block';
-}
-
-// Collision detection
-function checkCollision() {
-    for (let obstacle of obstacles) {
-        if (character.x < obstacle.x + obstacle.width &&
-            character.x + character.width > obstacle.x &&
-            character.y < obstacle.y + obstacle.height &&
-            character.y + character.height > obstacle.y) {
-            return true;
+        function preloadImages() {
+            return new Promise((resolve) => {
+                imagesToLoad.forEach(img => {
+                    img.onload = () => {
+                        imagesLoadedCount++;
+                        if (imagesLoadedCount === imagesToLoad.length) {
+                            resolve();
+                        }
+                    };
+                    img.onerror = () => {
+                        console.error(`Failed to load image: ${img.src}`);
+                        imagesLoadedCount++; // Still resolve to not block the game
+                        if (imagesLoadedCount === imagesToLoad.length) {
+                            resolve();
+                        }
+                    };
+                });
+            });
         }
-    }
-    return false;
-}
 
-document.addEventListener('keydown', function(event) {
-    if (event.code === 'Space' && !character.isJumping) {
-        character.isJumping = true;
-        character.velocityY = -character.jumpPower;
-    }
-});
+        // Draw functions
+        function drawBackground() {
+            // Draw the first image
+            ctx.drawImage(background.image, background.x, 0, canvas.width, canvas.height);
+            // Draw the second image right next to the first one
+            ctx.drawImage(background.image, background.x + canvas.width, 0, canvas.width, canvas.height);
 
-function generateObstacle() {
-    const obstacle = {
-        x: canvas.width,
-        y: canvas.height - 60,
-        width: 20,
-        height: 40
-    };
-    obstacles.push(obstacle);
-}
+            // Update the x position to create the scrolling effect
+            background.x -= background.speed;
 
-function updateObstacles() {
-    for (let i = obstacles.length - 1; i >= 0; i--) {
-        obstacles[i].x -= 5;
-        if (obstacles[i].x + obstacles[i].width < 0) {
-            obstacles.splice(i, 1);
-            score++;
+            // Reset the position when the first image goes off-screen
+            if (background.x <= -canvas.width) {
+                background.x = 0;
+            }
         }
-    }
-}
 
-function updateCharacter() {
-    if (character.isJumping) {
-        character.velocityY += character.gravity;
-        character.y += character.velocityY;
+        function drawCharacter() {
+            ctx.drawImage(characterImage, character.x, character.y, character.width, character.height);
+        }
 
-        if (character.y >= canvas.height - 60) {
-            character.y = canvas.height - 60;
-            character.isJumping = false;
+        function drawObstacle(obstacle) {
+            ctx.drawImage(obstacle.image, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        }
+
+        function drawScore() {
+            ctx.fillStyle = 'black';
+            ctx.font = "24px Fredoka One, sans-serif";
+            ctx.fillText(`Score: ${score}`, 10, 30);
+        }
+
+        function drawInstructions() {
+            ctx.fillStyle = 'black';
+            ctx.font = "24px Fredoka One, sans-serif";
+            ctx.textAlign = 'center';
+            ctx.fillText("Press the SPACEBAR to jump!", canvas.width / 2, canvas.height / 2 + 60);
+        }
+
+        function drawGameOver() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.font = "48px Fredoka One, sans-serif";
+            ctx.textAlign = 'center';
+            ctx.fillText("Game Over!", canvas.width / 2, canvas.height / 2 - 20);
+            ctx.font = "32px Fredoka One, sans-serif";
+            ctx.fillText(`Final Score: ${score}`, canvas.width / 2, canvas.height / 2 + 30);
+        }
+
+        // Game logic functions
+        function gameLoop() {
+            if (!gameRunning) {
+                return;
+            }
+
+            // Draw the scrolling background first
+            drawBackground();
+
+            // Update character position
+            character.velocityY -= gravity;
+            character.y -= character.velocityY;
+
+            // Check for ground collision
+            if (character.y > canvas.height - character.height) {
+                character.y = canvas.height - character.height;
+                character.velocityY = 0;
+                isJumping = false;
+            }
+
+            // Update obstacles
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obstacle = obstacles[i];
+                obstacle.x -= obstacleSpeed;
+
+                // Check for collision
+                if (
+                    character.x < obstacle.x + obstacle.width &&
+                    character.x + character.width > obstacle.x &&
+                    character.y < obstacle.y + obstacle.height &&
+                    character.y + character.height > obstacle.y
+                ) {
+                    gameOver();
+                    return;
+                }
+
+                // Remove off-screen obstacles and increment score
+                if (obstacle.x + obstacle.width < 0) {
+                    obstacles.splice(i, 1);
+                    score++;
+                }
+            }
+
+            // Draw everything
+            drawCharacter();
+            obstacles.forEach(drawObstacle);
+            drawScore();
+
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function jump() {
+            if (!isJumping && gameRunning) {
+                isJumping = true;
+                character.velocityY = jumpStrength;
+            }
+        }
+
+        function generateObstacle() {
+            if (!gameRunning) return;
+
+            const obstacleHeight = Math.random() * (90 - 50) + 50;
+            const obstacleWidth = 50;
+            const randomImage = Math.random() > 0.5 ? obstacleImage1 : obstacleImage2;
+
+            const obstacle = {
+                x: canvas.width,
+                y: canvas.height - obstacleHeight,
+                width: obstacleWidth,
+                height: obstacleHeight,
+                image: randomImage
+            };
+            obstacles.push(obstacle);
+        }
+
+        function startGame() {
+            gameRunning = true;
+            score = 0;
+            obstacles.length = 0;
+            character.y = canvas.height - character.height;
             character.velocityY = 0;
+
+            startButton.style.display = 'none';
+            restartButton.style.display = 'none';
+
+            gameLoop();
+            obstacleGenerationIntervalId = setInterval(generateObstacle, 1500);
         }
-    }
-}
 
-function drawBackground() {
-    // Draw two copies of the background side-by-side
-    ctx.drawImage(backgroundImage, backgroundX, 0, canvas.width, canvas.height);
-    ctx.drawImage(backgroundImage, backgroundX + canvas.width, 0, canvas.width, canvas.height);
+        function gameOver() {
+            gameRunning = false;
+            cancelAnimationFrame(animationFrameId);
+            clearInterval(obstacleGenerationIntervalId);
+            drawGameOver();
+            restartButton.style.display = 'block';
+        }
 
-    // Move background to the left
-    backgroundX -= backgroundSpeed;
+        // Event listeners
+        document.addEventListener("keydown", (e) => {
+            if (e.code === "Space") {
+                jump();
+            }
+        });
 
-    // Reset when the first image goes off screen
-    if (backgroundX <= -canvas.width) {
-        backgroundX = 0;
-    }
-}
+        startButton.addEventListener("click", () => {
+            startGame();
+        });
 
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+        restartButton.addEventListener("click", () => {
+            startGame();
+        });
 
-    // Draw scrolling background
-    drawBackground();
-
-    // Draw character
-    ctx.drawImage(characterImage, character.x, character.y, character.width, character.height);
-
-    // Draw obstacles
-    for (let obstacle of obstacles) {
-        ctx.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-    }
-
-    // Score
-    ctx.fillStyle = 'black';
-    ctx.font = '20px Arial';
-    ctx.fillText('Score: ' + score, 10, 20);
-
-    if (gameOver) {
-        ctx.font = '30px Arial';
-        ctx.fillText('Game Over', canvas.width / 2 - 70, canvas.height / 2);
-    }
-}
-
-// **New Function**
-function drawInstructions() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'; // Semi-transparent overlay
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = 'white';
-    ctx.font = '30px Arial';
-    ctx.fillText('How to Play', canvas.width / 2 - 80, canvas.height / 2 - 80);
-
-    ctx.font = '20px Arial';
-    ctx.fillText('Press the **Spacebar** to jump over the obstacles.', canvas.width / 2 - 200, canvas.height / 2 - 20);
-    ctx.fillText('Avoid the dogs to get a high score!', canvas.width / 2 - 150, canvas.height / 2 + 20);
-}
-
-// Event listeners
-startButton.addEventListener('click', initGame);
-restartButton.addEventListener('click', initGame);
-
-// **Modified to only start the interval after the game begins**
-let obstacleInterval;
-function startGameLoop() {
-    if (!gameRunning) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Game logic (e.g., character movement, obstacle generation)
-    updateCharacter();
-    updateObstacles();
-    draw();
-
-    if (checkCollision()) {
-        endGame();
-    } else {
-        requestAnimationFrame(startGameLoop);
-    }
-}
-
-function initGame() {
-    gameRunning = true;
-    gameOver = false;
-    startButton.style.display = 'none';
-    restartButton.style.display = 'none';
-    character.x = 50;
-    character.y = canvas.height - 60;
-    character.velocityY = 0;
-    character.isJumping = false;
-    obstacles = [];
-    score = 0;
-    // **Start the obstacle generation interval here**
-    obstacleInterval = setInterval(generateObstacle, 2000);
-    startGameLoop();
-}
-
-function endGame() {
-    gameRunning = false;
-    gameOver = true;
-    // **Clear the obstacle generation interval when the game ends**
-    clearInterval(obstacleInterval);
-    restartButton.style.display = 'block';
-}
-
-// **Initial draw call to show instructions when the page loads**
-window.onload = function() {
-    drawBackground(); // Draw the background first
-    drawInstructions();
-};
+        // Initial drawing of the game scene
+        window.addEventListener('load', () => {
+            preloadImages().then(() => {
+                ctx.fillStyle = 'black';
+                ctx.font = "48px Fredoka One, sans-serif";
+                ctx.textAlign = 'center';
+                ctx.fillText("Press Start to Play", canvas.width / 2, canvas.height / 2);
+                drawInstructions();
+            });
+        });
