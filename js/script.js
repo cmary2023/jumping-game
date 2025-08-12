@@ -48,10 +48,6 @@ const canvas = document.getElementById("gameCanvas");
         const imagesToLoad = [characterImage, obstacleImage1, obstacleImage2, background.image];
         let imagesLoadedCount = 0;
 
-// Sound players using Tone.js
-        const jumpSynth = new Tone.Synth().toDestination();
-        const gameOverSynth = new Tone.Synth().toDestination();
-
         function preloadImages() {
             return new Promise((resolve) => {
                 imagesToLoad.forEach(img => {
@@ -101,7 +97,6 @@ const canvas = document.getElementById("gameCanvas");
             ctx.font = "24px Fredoka One, sans-serif";
             ctx.fillText(`Score: ${score}`, 10, 30);
         }
-
 
         function drawGameOver() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
@@ -172,6 +167,7 @@ const canvas = document.getElementById("gameCanvas");
             }
         }
 
+//Generate Obstacole
         function generateObstacle() {
             if (!gameRunning) return;
 
@@ -188,7 +184,7 @@ const canvas = document.getElementById("gameCanvas");
             };
             obstacles.push(obstacle);
         }
-
+//Start game
     function startGame() {
     gameRunning = true;
     score = 0;
@@ -199,8 +195,6 @@ const canvas = document.getElementById("gameCanvas");
     startButton.style.display = 'none';
     restartButton.style.display = 'none';
             
-    // Start Tone.js when the game begins
-     Tone.start();
 
     // Hide instructions when game starts
     document.getElementById('instructions').style.display = 'none';
@@ -214,12 +208,8 @@ function gameOver() {
     cancelAnimationFrame(animationFrameId);
     clearInterval(obstacleGenerationIntervalId);
     drawGameOver();
-    restartButton.style.display = 'block';
-        // Play a synthetic sound for game over
-            gameOverSynth.triggerAttackRelease("C2", "2n");
-     
+    restartButton.style.display = 'block';       
 }
-
 
         // Event listeners
         document.addEventListener("keydown", (e) => {
@@ -236,7 +226,6 @@ function gameOver() {
             startGame();
         });
 
-        // Initial drawing of the game scene
         // Initial drawing of the game scene
         window.addEventListener('load', () => {
             preloadImages().then(() => {
