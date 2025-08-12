@@ -233,6 +233,5 @@ function gameOver() {
                 ctx.font = "48px Fredoka One, sans-serif";
                 ctx.textAlign = 'center';
                 ctx.fillText("Press Start to Play", canvas.width / 2, canvas.height / 2);
-                drawInstructions();
             });
         });
