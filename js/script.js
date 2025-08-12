@@ -192,26 +192,33 @@ const canvas = document.getElementById("gameCanvas");
         }
 
         function startGame() {
-            gameRunning = true;
-            score = 0;
-            obstacles.length = 0;
-            character.y = canvas.height - character.height;
-            character.velocityY = 0;
+    gameRunning = true;
+    score = 0;
+    obstacles.length = 0;
+    character.y = canvas.height - character.height;
+    character.velocityY = 0;
 
-            startButton.style.display = 'none';
-            restartButton.style.display = 'none';
+    startButton.style.display = 'none';
+    restartButton.style.display = 'none';
 
-            gameLoop();
-            obstacleGenerationIntervalId = setInterval(generateObstacle, 1500);
-        }
+    // Hide instructions when game starts
+    document.getElementById('instructions').style.display = 'none';
 
-        function gameOver() {
-            gameRunning = false;
-            cancelAnimationFrame(animationFrameId);
-            clearInterval(obstacleGenerationIntervalId);
-            drawGameOver();
-            restartButton.style.display = 'block';
-        }
+    gameLoop();
+    obstacleGenerationIntervalId = setInterval(generateObstacle, 1500);
+}
+
+function gameOver() {
+    gameRunning = false;
+    cancelAnimationFrame(animationFrameId);
+    clearInterval(obstacleGenerationIntervalId);
+    drawGameOver();
+    restartButton.style.display = 'block';
+
+    // Show instructions again on game over
+    document.getElementById('instructions').style.display = 'block';
+}
+
 
         // Event listeners
         document.addEventListener("keydown", (e) => {
