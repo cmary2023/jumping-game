@@ -23,7 +23,7 @@ body {
         /* Styling for the game title */
         .game-title {
             position: absolute;
-            top: -40px; /* Position above the game container */
+            top: -30px; /* Position above the game container */
             width: 100%;
             text-align: center;
             font-size: 2.25rem;
