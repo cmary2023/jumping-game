@@ -98,12 +98,6 @@ const canvas = document.getElementById("gameCanvas");
             ctx.fillText(`Score: ${score}`, 10, 30);
         }
 
-        function drawInstructions() {
-            ctx.fillStyle = 'black';
-            ctx.font = "24px Fredoka One, sans-serif";
-            ctx.textAlign = 'center';
-            ctx.fillText("Press the SPACEBAR to jump!", canvas.width / 2, canvas.height / 2 + 60);
-        }
 
         function drawGameOver() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
@@ -191,7 +185,7 @@ const canvas = document.getElementById("gameCanvas");
             obstacles.push(obstacle);
         }
 
-        function startGame() {
+    function startGame() {
     gameRunning = true;
     score = 0;
     obstacles.length = 0;
