@@ -48,6 +48,10 @@ const canvas = document.getElementById("gameCanvas");
         const imagesToLoad = [characterImage, obstacleImage1, obstacleImage2, background.image];
         let imagesLoadedCount = 0;
 
+// Sound players using Tone.js
+        const jumpSynth = new Tone.Synth().toDestination();
+        const gameOverSynth = new Tone.Synth().toDestination();
+
         function preloadImages() {
             return new Promise((resolve) => {
                 imagesToLoad.forEach(img => {
@@ -194,7 +198,9 @@ const canvas = document.getElementById("gameCanvas");
 
     startButton.style.display = 'none';
     restartButton.style.display = 'none';
-
+            
+    // Start Tone.js when the game begins
+    Tone.start();
     // Hide instructions when game starts
     document.getElementById('instructions').style.display = 'none';
 
@@ -208,6 +214,8 @@ function gameOver() {
     clearInterval(obstacleGenerationIntervalId);
     drawGameOver();
     restartButton.style.display = 'block';
+        // Play a synthetic sound for game over
+            gameOverSynth.triggerAttackRelease("C2", "2n");
 }
 
 
@@ -227,11 +235,9 @@ function gameOver() {
         });
 
         // Initial drawing of the game scene
+        // Initial drawing of the game scene
         window.addEventListener('load', () => {
             preloadImages().then(() => {
-                ctx.fillStyle = 'black';
-                ctx.font = "48px Fredoka One, sans-serif";
-                ctx.textAlign = 'center';
-                ctx.fillText("Press Start to Play", canvas.width / 2, canvas.height / 2);
+                drawInitialScreen();
             });
         });
