@@ -200,7 +200,9 @@ const canvas = document.getElementById("gameCanvas");
     restartButton.style.display = 'none';
             
     // Start Tone.js when the game begins
-    Tone.start();
+     Tone.start();
+   // Start background music
+     bgLoop.start();
     // Hide instructions when game starts
     document.getElementById('instructions').style.display = 'none';
 
@@ -216,6 +218,8 @@ function gameOver() {
     restartButton.style.display = 'block';
         // Play a synthetic sound for game over
             gameOverSynth.triggerAttackRelease("C2", "2n");
+         // Start background music
+            bgLoop.start();
 }
 
 
