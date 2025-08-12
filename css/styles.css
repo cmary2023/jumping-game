@@ -9,9 +9,6 @@ body {
     height: 100vh;
 }
 
-h1{
-    align: center;
-    )
 canvas {
     display: block;
     margin: 0 auto;
@@ -39,7 +36,12 @@ canvas {
 }
 
 #game-container {
-    border: 5px solid #FFD700; /* Gold border */
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+     position: relative;
+    width: 800px;
+    height: 300px;
+    background-image: url('./images/game-field.jpg');
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #333;
+    overflow: hidden;
+}
